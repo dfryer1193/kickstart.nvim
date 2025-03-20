@@ -93,6 +93,8 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+vim.opt.termguicolors = true
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -886,48 +888,43 @@ require('lazy').setup({
       }
     end,
   },
-
-  --  { -- You can easily change to a different colorscheme.
-  --    -- Change the name of the colorscheme plugin below, and then
-  --    -- change the command in the config to whatever the name of that colorscheme is.
-  --    --
-  --    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --    'rebelot/kanagawa.nvim',
-  --    priority = 1000, -- Make sure to load this before all the other start plugins.
-  --    config = function()
-  --      ---@diagnostic disable-next-line: missing-fields
-  --      require('kanagawa').setup {
-  --        compile = false,
-  --        undercurl = true,
-  --        transparent = true,
-  --        dimInactive = true,
-  --        theme = 'dragon',
-  --      }
-  --
-  --      -- Load the colorscheme here.
-  --      vim.cmd.colorscheme 'kanagawa'
-  --    end,
-  --  },
-
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
+    'catgoose/nvim-colorizer.lua',
+    event = 'BufReadPre',
+    opts = {},
+  },
+  {
+    'scottmckendry/cyberdream.nvim',
+    lazy = false,
     priority = 1000,
     config = function()
-      require('catppuccin').setup {
-        transparent_background = true,
-        term_colors = true,
-        dim_inactive = {
-          enabled = true,
-          shade = 'dark',
-          percentage = 0.15,
+      require('cyberdream').setup {
+        variant = 'default',
+        transparent = true,
+        italic_comments = true,
+        terminal_colors = true,
+        ---@diagnostic disable-next-line: missing-fields
+        colors = {
+          bg = '#161616',
+          bg_highlight = '#444444',
+          bg_alt = '#222222',
+          blue = '#66aabb',
+          cyan = '#6d878d',
+          fg = '#cccccc',
+          green = '#b7ce42',
+          grey = '#666666',
+          magenta = '#e16a98',
+          orange = '#fea63c',
+          pink = '#b7416e',
+          purple = '#42717b',
+          red = '#e84f4f',
+          yellow = '#ffe863',
+          bg_solid = '#161616',
         },
       }
-
-      vim.cmd.colorscheme 'catppuccin'
+      vim.cmd.colorscheme 'cyberdream'
     end,
   },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -1041,6 +1038,8 @@ require('lazy').setup({
     },
   },
 })
+
+require('colorizer').setup()
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
