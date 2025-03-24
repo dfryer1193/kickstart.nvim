@@ -991,6 +991,27 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  {
+    'augmentcode/augment.vim',
+    config = function()
+      vim.g.augment_workspace_folders = {
+        '~/.config/nvim/',
+        '~/workspace/mjolnir/',
+        '~/workspace/golinks/',
+        '~/workspace/gomad/',
+      }
+      vim.keymap.set('n', '<leader>ac', ':Augment chat<CR>', { desc = '[A]ugment [C]hat' })
+      vim.keymap.set('n', '<leader>an', ':Augment chat-new<CR>', { desc = '[A]ugment [N]ew' })
+      vim.keymap.set('n', '<leader>at', ':Augment chat-toggle<CR>', { desc = '[A]ugment [T]oggle' })
+    end,
+  },
+  {
+    'lambdalisue/suda.vim',
+    config = function()
+      vim.cmd [[command! -nargs=0 Please SudaWrite]]
+      vim.g.suda_smart_edit = 1
+    end,
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
