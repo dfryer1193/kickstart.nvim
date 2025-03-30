@@ -904,6 +904,7 @@ require('lazy').setup({
         transparent = true,
         italic_comments = true,
         terminal_colors = true,
+        borderless_pickers = false,
         ---@diagnostic disable-next-line: missing-fields
         colors = {
           bg = '#161616',
@@ -917,7 +918,7 @@ require('lazy').setup({
           magenta = '#e16a98',
           orange = '#fea63c',
           pink = '#b7416e',
-          purple = '#42717b',
+          purple = '#ac88bd',
           red = '#e84f4f',
           yellow = '#ffe863',
           bg_solid = '#161616',
@@ -1005,9 +1006,9 @@ require('lazy').setup({
         '~/workspace/golinks/',
         '~/workspace/gomad/',
       }
-      vim.keymap.set('n', '<leader>ac', ':Augment chat<CR>', { desc = '[A]ugment [C]hat' })
-      vim.keymap.set('n', '<leader>an', ':Augment chat-new<CR>', { desc = '[A]ugment [N]ew' })
-      vim.keymap.set('n', '<leader>at', ':Augment chat-toggle<CR>', { desc = '[A]ugment [T]oggle' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>ac', ':Augment chat<CR>', { desc = '[A]ugment [C]hat' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>an', ':Augment chat-new<CR>', { desc = '[A]ugment [N]ew' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>at', ':Augment chat-toggle<CR>', { desc = '[A]ugment [T]oggle' })
     end,
   },
   {
