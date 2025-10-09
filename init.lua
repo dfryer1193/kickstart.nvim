@@ -339,6 +339,7 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>a', group = '[A]ugment', mode = { 'n', 'v' } },
       },
     },
   },
@@ -976,18 +977,53 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  --{
+  --  'augmentcode/augment.vim',
+  --  config = function()
+  --    vim.g.augment_workspace_folders = {
+  --      '~/.config/nvim/',
+  --      '~/workspace/mjolnir/',
+  --      '~/workspace/golinks/',
+  --      '~/workspace/gomad/',
+  --    }
+  --    vim.keymap.set({ 'n', 'v' }, '<leader>ac', ':Augment chat<CR>', { desc = '[A]ugment [C]hat' })
+  --    vim.keymap.set({ 'n', 'v' }, '<leader>an', ':Augment chat-new<CR>', { desc = '[A]ugment [N]ew' })
+  --    vim.keymap.set({ 'n', 'v' }, '<leader>at', ':Augment chat-toggle<CR>', { desc = '[A]ugment [T]oggle' })
+  --  end,
+  --},
   {
-    'augmentcode/augment.vim',
-    config = function()
-      vim.g.augment_workspace_folders = {
-        '~/.config/nvim/',
-        '~/workspace/mjolnir/',
-        '~/workspace/golinks/',
-        '~/workspace/gomad/',
-      }
-      vim.keymap.set({ 'n', 'v' }, '<leader>ac', ':Augment chat<CR>', { desc = '[A]ugment [C]hat' })
-      vim.keymap.set({ 'n', 'v' }, '<leader>an', ':Augment chat-new<CR>', { desc = '[A]ugment [N]ew' })
-      vim.keymap.set({ 'n', 'v' }, '<leader>at', ':Augment chat-toggle<CR>', { desc = '[A]ugment [T]oggle' })
+    'olimorris/codecompanion.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    event = { 'BufReadPre', 'BufNewFile' },
+    opts = {
+      adapters = {
+        http = {
+          gemini = function()
+            return require('codecompanion.adapters').extend('gemini', {
+              schema = {
+                model = { default = 'gemini-2.0-flash' },
+              },
+            })
+          end,
+        },
+      },
+      strategies = {
+        chat = { adapter = 'gemini' },
+        inline = { adapter = 'gemini' },
+        agent = { adapter = 'gemini' },
+      },
+      opts = {
+        log_level = 'INFO',
+      },
+    },
+    config = function(_, opts)
+      require('codecompanion').setup(opts)
+
+      vim.keymap.set({ 'n', 'v' }, '<leader>cc', ':CodeCompanionChat<CR>', { desc = '[C]ode [C]ompanion [C]hat' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>cA', ':CodeCompanionActions<CR>', { desc = '[C]ode [C]ompanion [T]oggle' })
     end,
   },
   {
