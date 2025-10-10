@@ -770,7 +770,6 @@ require('lazy').setup({
       },
     },
   },
-
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',
@@ -992,38 +991,46 @@ require('lazy').setup({
   --  end,
   --},
   {
-    'olimorris/codecompanion.nvim',
+    'folke/sidekick.nvim',
     dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
+      'neovim/nvim-lspconfig',
     },
-    event = { 'BufReadPre', 'BufNewFile' },
     opts = {
-      adapters = {
-        http = {
-          gemini = function()
-            return require('codecompanion.adapters').extend('gemini', {
-              schema = {
-                model = { default = 'gemini-2.0-flash' },
-              },
-            })
-          end,
+      cli = {
+        mux = {
+          backend = 'tmux',
+          enabled = true,
         },
-      },
-      strategies = {
-        chat = { adapter = 'gemini' },
-        inline = { adapter = 'gemini' },
-        agent = { adapter = 'gemini' },
-      },
-      opts = {
-        log_level = 'INFO',
+        backends = {
+          flags = { '--model', '--gemini-2.0-flash' },
+        },
       },
     },
     config = function(_, opts)
-      require('codecompanion').setup(opts)
+      require('sidekick').setup(opts)
 
-      vim.keymap.set({ 'n', 'v' }, '<leader>cc', ':CodeCompanionChat<CR>', { desc = '[C]ode [C]ompanion [C]hat' })
-      vim.keymap.set({ 'n', 'v' }, '<leader>cA', ':CodeCompanionActions<CR>', { desc = '[C]ode [C]ompanion [T]oggle' })
+      -- Toggle Sidekick CLI pane
+      vim.keymap.set('n', '<leader>aa', function()
+        require('sidekick.cli').toggle()
+      end, { desc = 'Toggle Sidekick CLI', silent = true })
+
+      -- Send visual selection to Gemini CLI for agentic editing
+      vim.keymap.set('v', '<leader>as', function()
+        require('sidekick.cli').send_selection 'gemini'
+      end, { desc = 'Send visual selection to Gemini CLI', silent = true })
+
+      -- Send entire buffer to Gemini CLI
+      vim.keymap.set('n', '<leader>af', function()
+        require('sidekick.cli').send_buffer 'gemini'
+      end, { desc = 'Send buffer to Gemini CLI', silent = true })
+
+      vim.keymap.set('n', '<leader>ag', function()
+        require('sidekick.cli').toggle 'gemini'
+      end, { desc = 'Toggle Sidekick Gemini CLI', silent = true })
+
+      vim.keymap.set('n', '<leader>aq', function()
+        require('sidekick.cli').toggle 'qwen'
+      end, { desc = 'Toggle Sidekick Gemini CLI', silent = true })
     end,
   },
   {
