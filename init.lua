@@ -734,10 +734,19 @@ require('lazy').setup({
     cmd = 'Copilot',
     event = 'InsertEnter',
     config = function()
-      require('copilot').setup({
-        suggestion = { enabled = false },
+      require('copilot').setup {
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          keymap = {
+            accept = '<C-a>',
+            next = '<C-Tab>',
+            prev = '<S-Tab>',
+            dismiss = '<D-Esc>',
+          },
+        },
         panel = { enabled = false },
-      })
+      }
     end,
   },
   { -- Autoformat
@@ -842,9 +851,9 @@ require('lazy').setup({
         -- See :h blink-cmp-config-keymap for defining your own keymap
         keymap = {
           ['<C-y>'] = { 'accept', 'fallback' },
-          ['<C-Tab>'] = { 'accept', 'fallback' },
-          ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
-          ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+          ['<C-n>'] = { 'select_next', 'fallback' },
+          ['<C-p>'] = { 'select_prev', 'fallback' },
+          ['<Tab>'] = { 'snippet_forward', 'fallback' },
           ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
           ['<C-e>'] = { 'hide', 'fallback' },
         },
