@@ -729,6 +729,17 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = 'InsertEnter',
+    config = function()
+      require('copilot').setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end,
+  },
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
@@ -772,9 +783,10 @@ require('lazy').setup({
   },
   { -- Autocompletion
     'saghen/blink.cmp',
-    event = 'VimEnter',
+    event = 'InsertEnter',
     version = '1.*',
     dependencies = {
+      'giuxtaposition/blink-cmp-copilot',
       -- Snippet Engine
       {
         'L3MON4D3/LuaSnip',
@@ -828,7 +840,14 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        keymap = {
+          ['<C-y>'] = { 'accept', 'fallback' },
+          ['<C-Tab>'] = { 'accept', 'fallback' },
+          ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+          ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+          ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+          ['<C-e>'] = { 'hide', 'fallback' },
+        },
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -847,9 +866,10 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'copilot' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          copilot = { module = 'blink-cmp-copilot' },
         },
       },
 
@@ -1030,7 +1050,11 @@ require('lazy').setup({
 
       vim.keymap.set('n', '<leader>aq', function()
         require('sidekick.cli').toggle 'qwen'
-      end, { desc = 'Toggle Sidekick Gemini CLI', silent = true })
+      end, { desc = 'Toggle Sidekick Qwen CLI', silent = true })
+
+      vim.keymap.set('n', '<leader>ac', function()
+        require('sidekick.cli').toggle 'copilot'
+      end, { desc = 'Toggle Sidekick Copilot CLI', silent = true })
     end,
   },
   {
