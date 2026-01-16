@@ -1073,6 +1073,12 @@ require('lazy').setup({
       vim.g.suda_smart_edit = 1
     end,
   },
+  {
+    'opdavies/toggle-checkbox.nvim',
+    config = function()
+      vim.keymap.set('n', '<leader>tt', ":lua require('toggle-checkbox').toggle()<CR>")
+    end,
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and

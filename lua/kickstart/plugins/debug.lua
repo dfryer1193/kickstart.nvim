@@ -76,6 +76,62 @@ return {
       end,
       desc = 'Debug: See last session result.',
     },
+    {
+      '<leader>Dd',
+      function()
+        local dap = require('dap')
+        for _, config in ipairs(dap.configurations.go) do
+          if config.name == 'Debug Package' then
+            dap.run(config)
+            return
+          end
+        end
+      end,
+      desc = 'Debug: Debug Package',
+    },
+    -- Alternative keybinds without F-keys
+    {
+      '<leader>Dc',
+      function()
+        require('dap').continue()
+      end,
+      desc = 'Debug: Start/Continue',
+    },
+    {
+      '<leader>Di',
+      function()
+        require('dap').step_into()
+      end,
+      desc = 'Debug: Step Into',
+    },
+    {
+      '<leader>Do',
+      function()
+        require('dap').step_over()
+      end,
+      desc = 'Debug: Step Over',
+    },
+    {
+      '<leader>Du',
+      function()
+        require('dap').step_out()
+      end,
+      desc = 'Debug: Step Out',
+    },
+    {
+      '<leader>Dt',
+      function()
+        require('dapui').toggle()
+      end,
+      desc = 'Debug: Toggle UI',
+    },
+    {
+      '<leader>Dx',
+      function()
+        require('dap').terminate()
+      end,
+      desc = 'Debug: Terminate/Stop',
+    },
   },
   config = function()
     local dap = require 'dap'
@@ -144,5 +200,13 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+
+    -- Add manual Go configurations for multi-main projects
+    table.insert(dap.configurations.go, {
+      type = 'go',
+      name = 'Debug Package',
+      request = 'launch',
+      program = '${fileDirname}',
+    })
   end,
 }
