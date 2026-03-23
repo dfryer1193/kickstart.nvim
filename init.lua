@@ -1005,20 +1005,6 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
-  --{
-  --  'augmentcode/augment.vim',
-  --  config = function()
-  --    vim.g.augment_workspace_folders = {
-  --      '~/.config/nvim/',
-  --      '~/workspace/mjolnir/',
-  --      '~/workspace/golinks/',
-  --      '~/workspace/gomad/',
-  --    }
-  --    vim.keymap.set({ 'n', 'v' }, '<leader>ac', ':Augment chat<CR>', { desc = '[A]ugment [C]hat' })
-  --    vim.keymap.set({ 'n', 'v' }, '<leader>an', ':Augment chat-new<CR>', { desc = '[A]ugment [N]ew' })
-  --    vim.keymap.set({ 'n', 'v' }, '<leader>at', ':Augment chat-toggle<CR>', { desc = '[A]ugment [T]oggle' })
-  --  end,
-  --},
   {
     'folke/sidekick.nvim',
     dependencies = {
@@ -1077,6 +1063,47 @@ require('lazy').setup({
     'opdavies/toggle-checkbox.nvim',
     config = function()
       vim.keymap.set('n', '<leader>tt', ":lua require('toggle-checkbox').toggle()<CR>")
+    end,
+  },
+  {
+    'zk-org/zk-nvim',
+    config = function()
+      require('zk').setup {
+        picker = 'telescope',
+
+        lsp = {
+          config = {
+            cmd = { 'zk', 'lsp' },
+            name = 'zk',
+          },
+          auto_attach = {
+            enabled = true,
+            filetypes = { 'markdown' },
+          },
+        },
+      }
+
+      local wk = require 'which-key'
+      wk.add {
+        { '<leader>n', group = '[N]otes' },
+      }
+
+      -- Define keymaps using your existing leader pattern
+      local map = vim.keymap.set
+      vim.keymap.set('n', '<leader>nn', "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>", { desc = '[N]ew [N]ote' })
+      vim.keymap.set('n', '<leader>no', '<Cmd>ZkNotes<CR>', { desc = '[N]ote [O]pen' })
+      vim.keymap.set('n', '<leader>nt', '<Cmd>ZkTags<CR>', { desc = '[N]ote [T]ags' })
+      vim.keymap.set('n', '<leader>nl', '<Cmd>ZkLinks<CR>', { desc = '[N]ote [L]inks' })
+      vim.keymap.set('n', '<leader>nb', '<Cmd>ZkBacklinks<CR>', { desc = '[N]ote [B]acklinks' })
+      vim.keymap.set('n', '<leader>ni', '<Cmd>ZkIndex<CR>', { desc = '[N]ote [I]ndex' })
+      vim.keymap.set('n', '<leader>ne', "<Cmd>ZkNotes { sort = { 'modified' } }<CR>", { desc = '[N]ote [E]xplorer' })
+
+      -- Visual mode: Link the selected text
+      map('v', '<leader>nl', ":'<,'>ZkInsertLinkAtSelection<cr>", { desc = '[N]ote [L]ink Selection' })
+
+      -- Insert mode
+      vim.keymap.set('i', '<C-x><C-t>', '<Cmd>ZkTags<CR>', { desc = 'Insert [T]ag' })
+      vim.keymap.set('i', '<C-x>l', '<Cmd>ZkInsertLink<CR>', { desc = 'Insert [L]ink' })
     end,
   },
 
