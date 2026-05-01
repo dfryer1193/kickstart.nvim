@@ -187,6 +187,23 @@ vim.diagnostic.config {
   jump = { float = true },
 }
 
+-- Customize settings for markdown files
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('custom-markdown-settings', { clear = true }),
+  pattern = 'markdown',
+  callback = function()
+    -- Make diagnostics less intrusive
+    vim.diagnostic.config({
+      virtual_text = false,
+      underline = false,
+    })
+    -- Add QoL list editing features
+    vim.cmd('setlocal formatoptions+=ronj')
+    -- Set comments for proper list continuation
+    vim.cmd('setlocal comments=s:<!--,e:-->,b:*,b:-,b:+,n:>,f:-,f:*,f:+')
+  end,
+})
+
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
